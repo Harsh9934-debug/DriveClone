@@ -11,6 +11,7 @@ router.get('/register', (req, res) => {
 });
 
 router.post('/register', (req, res) => {
+    console.log(req.body); // You can see the form data in the console by using this 
     res.send('User registered successfully!');
 });
 
