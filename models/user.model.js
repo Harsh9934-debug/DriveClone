@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const userSchema = new mongoose.Schema({
-    username: {
+    name: {
         type: String,
         required: true,
         unique: true,
         trim: true,
-        minlenghth: [3, 'Username must be at least 3 characters long']
+        minlength: [3, 'Name must be at least 3 characters long'] // Added for consistency
     },
     email: {
         type: String,
@@ -27,4 +27,4 @@ const userSchema = new mongoose.Schema({
 
 const User = mongoose.model('User', userSchema);
 
-module.exports = User;  
+module.exports = User;
