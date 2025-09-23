@@ -69,6 +69,7 @@ router.post('/login', async (req, res) => {
     res.cookie('token', token, { httpOnly: true });
 
     res.json({ message: 'Login successful' });
+
 });
 
 
