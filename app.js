@@ -5,7 +5,7 @@ dotenv.config(); // this is used in the section to load the environment variable
 const connectToDB = require('./config/db');  // rendering the db connection function
 const cookieParser = require('cookie-parser');
 connectToDB(); // this is the section used to connect to the database
-
+const indexRoutes = require('./routes/index.routes');
 
 const app = express();
 
@@ -16,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 
+app.use('/', indexRoutes);
 app.use('/user', userRoutes); 
 
 app.listen(3000, () => {
