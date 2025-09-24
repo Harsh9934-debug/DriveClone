@@ -4,17 +4,20 @@ const dotenv = require('dotenv');    // this is used for environment variables u
 dotenv.config(); // this is used in the section to load the environment variables from the .env file
 const connectToDB = require('./config/db');  // rendering the db connection function
 const cookieParser = require('cookie-parser');
+const path = require('path');
+
 connectToDB(); // this is the section used to connect to the database
 const indexRoutes = require('./routes/index.routes');
 
 const app = express();
-
 
 app.set('view engine', 'ejs');
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+// Serve static files (for serving uploaded files if needed)
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 app.use('/', indexRoutes);
 app.use('/user', userRoutes); 
