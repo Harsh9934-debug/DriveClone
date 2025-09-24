@@ -10,125 +10,81 @@
     <title>Upload Files - Drive Clone</title>
 
     <style>
-        * {
+        body {
             font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
         }
-
-        .dark-gradient-bg {
-            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #1a1a2e 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 20s ease infinite;
+        .nav-bar {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid #333;
         }
-
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .main-card {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
         }
-
-        .floating {
-            animation: float 8s ease-in-out infinite;
+        .feature-card {
+            background-color: #2a2a2a;
+            border: 1px solid #444;
         }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-25px); }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            transition: background-color 0.3s ease;
         }
-
-        .glow-button {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-            transition: all 0.3s ease;
+        .btn-primary:hover {
+            background-color: #1d4ed8;
         }
-
-        .glow-button:hover {
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3);
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid #3b82f6;
+            color: #3b82f6;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
-
-        .glass-card {
-            background: rgba(17, 25, 40, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+        .btn-secondary:hover {
+            background-color: #3b82f6;
+            color: white;
         }
-
-        .drag-over {
-            border-color: #3b82f6 !important;
-            background: rgba(59, 130, 246, 0.1) !important;
-            transform: scale(1.02);
+        .modal-card {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
         }
-
-        .particle {
-            position: absolute;
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #06b6d4);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: particles 30s linear infinite;
+        .dropzone {
+            border: 2px dashed #444;
+            background-color: #2a2a2a;
         }
-
-        @keyframes particles {
-            0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(200px) rotate(720deg);
-                opacity: 0;
-            }
+        .dropzone.drag-over {
+            border-color: #2563eb;
+            background-color: rgba(37, 99, 235, 0.1);
         }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(2rem) scale(0.95); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
+        .form-input {
+            background-color: #2a2a2a;
+            border: 1px solid #444;
+            color: #ffffff;
         }
-
-        .modal-fade-in {
-            animation: fadeIn 0.4s ease-out forwards;
+        .form-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.4);
         }
-
-        .progress-bar {
-            background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
-            background-size: 300% 100%;
-            animation: progressGlow 2s ease infinite;
+        .progress-bar-bg {
+            background-color: #444;
         }
-
-        @keyframes progressGlow {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        .progress-bar-fill {
+            background-color: #2563eb;
         }
     </style>
 </head>
 
-<body class="dark-gradient-bg min-h-screen relative overflow-x-hidden">
+<body class="min-h-screen">
 
-    <div class="particle w-2 h-2" style="left: 5%; animation-delay: 0s;"></div>
-    <div class="particle w-1 h-1" style="left: 15%; animation-delay: 8s;"></div>
-    <div class="particle w-3 h-3" style="left: 25%; animation-delay: 16s;"></div>
-    <div class="particle w-2 h-2" style="left: 35%; animation-delay: 24s;"></div>
-    <div class="particle w-1 h-1" style="left: 45%; animation-delay: 4s;"></div>
-    <div class="particle w-2 h-2" style="left: 55%; animation-delay: 12s;"></div>
-    <div class="particle w-1 h-1" style="left: 65%; animation-delay: 20s;"></div>
-    <div class="particle w-3 h-3" style="left: 75%; animation-delay: 28s;"></div>
-    <div class="particle w-2 h-2" style="left: 85%; animation-delay: 6s;"></div>
-    <div class="particle w-1 h-1" style="left: 95%; animation-delay: 14s;"></div>
-
-    <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute top-1/4 left-1/6 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl floating"></div>
-        <div class="absolute bottom-1/4 right-1/6 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl floating" style="animation-delay: 5s;"></div>
-        <div class="absolute top-3/4 left-3/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl floating" style="animation-delay: 10s;"></div>
-    </div>
-
-    <nav class="glass-card border-b border-gray-700/50 relative z-10">
+    <nav class="nav-bar sticky top-0 z-20">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-6">
+            <div class="flex justify-between items-center py-4">
                 <div class="flex items-center">
                     <div class="flex items-center mr-4">
-                        <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                        <div class="w-10 h-10 bg-blue-600 rounded-xl flex items-center justify-center">
                             <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"></path>
                                 <path fill-rule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"></path>
@@ -139,9 +95,9 @@
                 </div>
                 <div class="hidden md:block">
                     <div class="flex items-center space-x-6">
-                        <a href="/home" class="text-blue-400 px-4 py-2 rounded-lg text-sm font-medium bg-blue-500/20 border border-blue-500/30">Upload</a>
-                        <a href="/files" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700/50 transition-colors">My Files</a>
-                        <a href="/public-files" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700/50 transition-colors">Public Gallery</a>
+                        <a href="/home" class="text-white px-4 py-2 rounded-lg text-sm font-medium bg-gray-700">Upload</a>
+                        <a href="/files" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">My Files</a>
+                        <a href="/public-files" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">Public Gallery</a>
                         <button onclick="logout()" class="text-gray-300 hover:text-red-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-500/20 transition-colors">Logout</button>
                     </div>
                 </div>
@@ -154,47 +110,44 @@
                 </div>
             </div>
         </div>
-        <div id="mobile-menu" class="md:hidden hidden bg-gray-800/80 backdrop-blur-lg border-t border-gray-700">
+        <div id="mobile-menu" class="md:hidden hidden bg-black/90 backdrop-blur-lg border-t border-gray-800">
             <div class="px-4 pt-4 pb-6 space-y-2">
-                <a href="/home" class="text-blue-400 block px-4 py-3 text-base font-medium bg-blue-500/20 rounded-lg">Upload</a>
-                <a href="/files" class="text-gray-300 hover:text-white block px-4 py-3 text-base font-medium hover:bg-gray-700/50 rounded-lg transition-colors">My Files</a>
-                <a href="/public-files" class="text-gray-300 hover:text-white block px-4 py-3 text-base font-medium hover:bg-gray-700/50 rounded-lg transition-colors">Public Gallery</a>
+                <a href="/home" class="text-white block px-4 py-3 text-base font-medium bg-gray-700 rounded-lg">Upload</a>
+                <a href="/files" class="text-gray-300 hover:text-white block px-4 py-3 text-base font-medium hover:bg-gray-800 rounded-lg transition-colors">My Files</a>
+                <a href="/public-files" class="text-gray-300 hover:text-white block px-4 py-3 text-base font-medium hover:bg-gray-800 rounded-lg transition-colors">Public Gallery</a>
                 <button onclick="logout()" class="text-gray-300 hover:text-red-400 block px-4 py-3 text-base font-medium w-full text-left hover:bg-red-500/20 rounded-lg transition-colors">Logout</button>
             </div>
         </div>
     </nav>
 
-    <main class="min-h-screen flex flex-col justify-center items-center p-4 relative z-10">
-        <div class="w-full max-w-2xl p-10 text-center glass-card rounded-3xl shadow-2xl">
+    <main class="flex flex-col justify-center items-center p-4 py-16">
+        <div class="w-full max-w-3xl p-10 text-center main-card rounded-3xl shadow-2xl">
             <div class="mb-8">
-                <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl mb-6 glow-button">
+                <div class="inline-flex items-center justify-center w-20 h-20 bg-blue-600 rounded-2xl mb-6">
                     <svg class="w-10 h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                     </svg>
                 </div>
                 <h1 class="text-5xl font-bold text-white mb-4">
-                    Secure File
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
-                        Upload
-                    </span>
+                    Secure File Upload
                 </h1>
-                <p class="text-gray-300 text-xl mb-8 max-w-lg mx-auto">
-                    Upload and manage your files with military-grade security and lightning-fast performance
+                <p class="text-gray-400 text-xl mb-8 max-w-lg mx-auto">
+                    Upload and manage your files with robust security and fast performance.
                 </p>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-6 justify-center">
-                <button onclick="openUploadModal()" class="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-purple-700 glow-button transition-all duration-300 transform hover:scale-105">
+                <button onclick="openUploadModal()" class="group btn-primary px-8 py-4 rounded-xl text-lg font-semibold transform hover:scale-105">
                     <span class="flex items-center justify-center">
-                        <svg class="w-6 h-6 mr-3 group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                         </svg>
                         Upload New File
                     </span>
                 </button>
-                <a href="/files" class="group bg-transparent border-2 border-blue-400 text-blue-400 px-8 py-4 rounded-xl text-lg font-semibold hover:bg-blue-400 hover:text-white transition-all duration-300 backdrop-blur-sm">
+                <a href="/files" class="group btn-secondary px-8 py-4 rounded-xl text-lg font-semibold">
                     <span class="flex items-center justify-center">
-                        <svg class="w-6 h-6 mr-3 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
                         </svg>
                         View My Files
@@ -203,29 +156,29 @@
             </div>
 
             <div class="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <div class="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                <div class="feature-card rounded-xl p-6">
                     <div class="text-3xl mb-2">🔒</div>
                     <h3 class="text-lg font-semibold text-white mb-2">Encrypted Storage</h3>
-                    <p class="text-gray-400 text-sm">Your files are protected with AES-256 encryption</p>
+                    <p class="text-gray-400 text-sm">Your files are protected with AES-256 encryption.</p>
                 </div>
-                <div class="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                <div class="feature-card rounded-xl p-6">
                     <div class="text-3xl mb-2">⚡</div>
                     <h3 class="text-lg font-semibold text-white mb-2">Lightning Fast</h3>
-                    <p class="text-gray-400 text-sm">Optimized upload speeds up to 100MB/s</p>
+                    <p class="text-gray-400 text-sm">Optimized upload speeds for efficiency.</p>
                 </div>
-                <div class="bg-gray-800/30 backdrop-blur-sm rounded-xl p-6 border border-gray-700">
+                <div class="feature-card rounded-xl p-6">
                     <div class="text-3xl mb-2">🌐</div>
                     <h3 class="text-lg font-semibold text-white mb-2">Global Access</h3>
-                    <p class="text-gray-400 text-sm">Access your files from anywhere in the world</p>
+                    <p class="text-gray-400 text-sm">Access your files from anywhere in the world.</p>
                 </div>
             </div>
         </div>
 
         <div id="upload-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-            <div class="relative w-full max-w-2xl glass-card rounded-3xl shadow-2xl modal-fade-in">
+            <div class="relative w-full max-w-2xl modal-card rounded-3xl shadow-2xl">
                 <div class="flex items-center justify-between p-8 border-b border-gray-700">
                     <h3 class="text-2xl font-bold text-white">Share Your File</h3>
-                    <button id="close-modal-button" onclick="closeUploadModal()" class="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-gray-700/50 transition-colors">
+                    <button id="close-modal-button" onclick="closeUploadModal()" class="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-gray-700 transition-colors">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                         </svg>
@@ -233,9 +186,9 @@
                 </div>
                 <div class="p-8">
                     <form id="uploadForm" action="/upload-file" method="post" enctype="multipart/form-data">
-                        <label id="dropzone-label" for="dropzone-file" class="flex flex-col items-center justify-center w-full p-12 border-2 border-gray-600 border-dashed rounded-2xl cursor-pointer bg-gray-800/30 hover:bg-gray-700/30 transition-all duration-300">
+                        <label id="dropzone-label" for="dropzone-file" class="dropzone flex flex-col items-center justify-center w-full p-12 rounded-2xl cursor-pointer transition-all duration-300">
                             <div id="dropzone-content" class="flex flex-col items-center justify-center text-center">
-                                <div class="w-16 h-16 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl flex items-center justify-center mb-6">
+                                <div class="w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center mb-6">
                                     <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
                                     </svg>
@@ -243,7 +196,7 @@
                                 <p class="mb-3 text-lg text-gray-300">
                                     <span class="font-semibold text-blue-400">Click to upload</span> or drag and drop
                                 </p>
-                                <p class="text-sm text-gray-500">Support for any file type • Max size 100MB</p>
+                                <p class="text-sm text-gray-500">Max file size: 100MB</p>
                             </div>
                             <div id="file-preview" class="hidden text-center">
                                 <img id="image-preview" src="#" alt="Image Preview" class="hidden max-h-48 mx-auto rounded-xl shadow-lg mb-6 border border-gray-600"/>
@@ -266,7 +219,7 @@
                                     type="text" 
                                     id="description" 
                                     name="description"
-                                    class="w-full px-4 py-3 bg-gray-800/50 border border-gray-600 rounded-xl text-white placeholder-gray-400 focus:outline-none focus:border-blue-500 transition-colors"
+                                    class="form-input w-full px-4 py-3 rounded-xl placeholder-gray-500"
                                     placeholder="Add a description for your file..."
                                 />
                             </div>
@@ -282,7 +235,7 @@
                                         Make this file public
                                     </label>
                                     <p class="text-sm text-gray-400 mt-1">
-                                        Public files can be viewed and downloaded by anyone with the link
+                                        Public files can be viewed by anyone.
                                     </p>
                                 </div>
                             </div>
@@ -292,8 +245,8 @@
                                 <span>Uploading...</span>
                                 <span id="progress-text">0%</span>
                             </div>
-                            <div class="w-full bg-gray-700 rounded-full h-3">
-                                <div id="progress-bar" class="progress-bar h-3 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
+                            <div class="w-full progress-bar-bg rounded-full h-3">
+                                <div id="progress-bar" class="progress-bar-fill h-3 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
                             </div>
                         </div>
                     </form>
@@ -302,7 +255,7 @@
                     <button id="cancel-button" onclick="closeUploadModal()" type="button" class="px-6 py-3 text-sm font-medium text-gray-300 bg-gray-700 hover:bg-gray-600 rounded-xl transition-colors">
                         Cancel
                     </button>
-                    <button type="submit" form="uploadForm" class="px-8 py-3 text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 font-medium rounded-xl text-sm glow-button transition-all duration-300">
+                    <button type="submit" form="uploadForm" class="btn-primary px-8 py-3 font-medium rounded-xl text-sm">
                         Upload File
                     </button>
                 </div>
@@ -400,85 +353,72 @@
                 return;
             }
 
-            // Show progress
             progressContainer.classList.remove('hidden');
-            progressBar.style.width = '0%';
-            progressText.textContent = '0%';
-
-            // Create FormData
-            const formData = new FormData(uploadForm);
             
-            try {
-                // Simulate progress
-                let progress = 0;
-                const progressInterval = setInterval(() => {
-                    progress += Math.random() * 20;
-                    if (progress > 90) progress = 90;
-                    progressBar.style.width = progress + '%';
-                    progressText.textContent = Math.round(progress) + '%';
-                }, 200);
+            const formData = new FormData(uploadForm);
+            const xhr = new XMLHttpRequest();
 
-                const response = await fetch('/upload-file', {
-                    method: 'POST',
-                    body: formData
-                });
+            xhr.open('POST', '/upload-file', true);
 
-                clearInterval(progressInterval);
-                progressBar.style.width = '100%';
-                progressText.textContent = '100%';
+            xhr.upload.onprogress = function(event) {
+                if (event.lengthComputable) {
+                    const percentComplete = (event.loaded / event.total) * 100;
+                    progressBar.style.width = percentComplete + '%';
+                    progressText.textContent = Math.round(percentComplete) + '%';
+                }
+            };
 
-                const result = await response.json();
-
-                if (result.success) {
+            xhr.onload = function() {
+                if (xhr.status === 200) {
+                    const result = JSON.parse(xhr.responseText);
                     showNotification(`File "${result.file.originalName}" uploaded successfully!`, 'success');
                     setTimeout(() => {
                         closeUploadModal();
-                    }, 2000);
+                    }, 1500);
                 } else {
-                    showNotification('Error: ' + result.message, 'error');
+                    try {
+                        const result = JSON.parse(xhr.responseText);
+                        showNotification('Error: ' + result.message, 'error');
+                    } catch (e) {
+                        showNotification('An unknown error occurred.', 'error');
+                    }
                     progressContainer.classList.add('hidden');
                 }
-            } catch (error) {
-                console.error('Upload error:', error);
-                showNotification('Upload failed. Please try again.', 'error');
+            };
+
+            xhr.onerror = function() {
+                showNotification('Upload failed. Please check your connection and try again.', 'error');
                 progressContainer.classList.add('hidden');
-            }
+            };
+
+            xhr.send(formData);
         });
 
         // Notification system
         function showNotification(message, type) {
             const notification = document.createElement('div');
-            notification.className = `fixed top-4 right-4 px-6 py-4 rounded-xl backdrop-blur-sm z-50 transition-all duration-300 ${
-                type === 'success' ? 'bg-green-500/20 border border-green-500/30 text-green-300' : 'bg-red-500/20 border border-red-500/30 text-red-300'
+            notification.className = `fixed top-5 right-5 px-6 py-4 rounded-xl z-50 transition-all duration-300 ${
+                type === 'success' ? 'bg-green-600 text-white' : 'bg-red-600 text-white'
             }`;
-            notification.innerHTML = `
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        ${type === 'success'
-                            ? '<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>'
-                            : '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd"></path>'
-                        }
-                    </svg>
-                    ${message}
-                </div>
-            `;
+            notification.textContent = message;
             document.body.appendChild(notification);
             
             setTimeout(() => {
-                notification.remove();
-            }, 5000);
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateY(-20px)';
+                setTimeout(() => notification.remove(), 300);
+            }, 4000);
         }
 
         // Reset form
         function resetForm() {
+            uploadForm.reset();
             fileInputEl.value = '';
             dropzoneContent.classList.remove('hidden');
             filePreview.classList.add('hidden');
             progressContainer.classList.add('hidden');
             progressBar.style.width = '0%';
             progressText.textContent = '0%';
-            document.getElementById('description').value = '';
-            document.getElementById('isPublic').checked = false;
         }
 
         // Mobile menu toggle
@@ -500,21 +440,14 @@
 
         // Logout functionality
         window.logout = async function() {
-            if (confirm('Are you sure you want to logout?')) {
-                try {
-                    const response = await fetch('/user/logout', {
-                        method: 'POST',
-                        credentials: 'include'
-                    });
-                    
-                    if (response.ok) {
-                        window.location.href = '/';
-                    } else {
-                        window.location.href = '/user/login';
-                    }
-                } catch (error) {
-                    window.location.href = '/user/login';
-                }
+            try {
+                const response = await fetch('/user/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+                window.location.href = '/';
+            } catch (error) {
+                window.location.href = '/user/login';
             }
         };
     </script>

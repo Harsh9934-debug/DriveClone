@@ -1,434 +1,196 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Public Gallery - Drive Clone</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <title>Public Gallery - Drive Clone</title>
     <style>
-        * {
+        body {
             font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
         }
-        
-        .dark-gradient-bg {
-            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #1a1a2e 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 20s ease infinite;
-        }
-        
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .floating {
-            animation: float 8s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-25px); }
-        }
-        
-        .glass-card {
-            background: rgba(17, 25, 40, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .particle {
-            position: absolute;
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #06b6d4);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: particles 30s linear infinite;
-        }
-        
-        @keyframes particles {
-            0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(200px) rotate(720deg);
-                opacity: 0;
-            }
-        }
-        
-        .gallery-card {
-            background: rgba(17, 25, 40, 0.5);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .gallery-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-            transition: left 0.5s;
-        }
-        
-        .gallery-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.4);
-            border-color: rgba(59, 130, 246, 0.4);
-        }
-        
-        .gallery-card:hover::before {
-            left: 100%;
-        }
-        
-        .glow-button {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .glow-button:hover {
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3);
-        }
+        .bg-gray-900 { background-color: #1a1a1a; }
+        .bg-gray-800 { background-color: #2a2a2a; }
+        .border-gray-700 { border-color: #333333; }
+        .border-gray-800 { border-color: #444444; }
         
         .masonry-grid {
             column-count: 1;
             column-gap: 1.5rem;
         }
-        
-        @media (min-width: 640px) {
-            .masonry-grid {
-                column-count: 2;
-            }
-        }
-        
-        @media (min-width: 1024px) {
-            .masonry-grid {
-                column-count: 3;
-            }
-        }
-        
-        @media (min-width: 1280px) {
-            .masonry-grid {
-                column-count: 4;
-            }
-        }
+        @media (min-width: 640px) { .masonry-grid { column-count: 2; } }
+        @media (min-width: 1024px) { .masonry-grid { column-count: 3; } }
         
         .masonry-item {
             break-inside: avoid;
             margin-bottom: 1.5rem;
         }
-        
-        .pulse-ring {
-            position: absolute;
-            border: 2px solid rgba(59, 130, 246, 0.4);
-            border-radius: 50%;
-            animation: pulse-ring 2s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
-        }
-        
-        @keyframes pulse-ring {
-            0% {
-                transform: scale(1);
-                opacity: 1;
-            }
-            100% {
-                transform: scale(2);
-                opacity: 0;
-            }
-        }
     </style>
 </head>
-<body class="dark-gradient-bg min-h-screen relative overflow-x-hidden">
-    <!-- Animated Background Particles -->
-    <div class="particle w-2 h-2" style="left: 5%; animation-delay: 0s;"></div>
-    <div class="particle w-1 h-1" style="left: 15%; animation-delay: 8s;"></div>
-    <div class="particle w-3 h-3" style="left: 25%; animation-delay: 16s;"></div>
-    <div class="particle w-2 h-2" style="left: 35%; animation-delay: 24s;"></div>
-    <div class="particle w-1 h-1" style="left: 45%; animation-delay: 4s;"></div>
-    <div class="particle w-2 h-2" style="left: 55%; animation-delay: 12s;"></div>
-    <div class="particle w-1 h-1" style="left: 65%; animation-delay: 20s;"></div>
-    <div class="particle w-3 h-3" style="left: 75%; animation-delay: 28s;"></div>
-    <div class="particle w-2 h-2" style="left: 85%; animation-delay: 6s;"></div>
-    <div class="particle w-1 h-1" style="left: 95%; animation-delay: 14s;"></div>
-    
-    <!-- Background Blurs -->
-    <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute top-1/4 left-1/6 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl floating"></div>
-        <div class="absolute bottom-1/4 right-1/6 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl floating" style="animation-delay: 5s;"></div>
-        <div class="absolute top-3/4 left-3/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl floating" style="animation-delay: 10s;"></div>
-    </div>
+<body class="min-h-screen">
 
     <!-- Navigation -->
-    <nav class="glass-card border-b border-gray-700/50 relative z-10">
+    <nav class="bg-gray-900 border-b border-gray-800 sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-6">
-                <div class="flex items-center">
-                    <div class="flex items-center mr-4">
-                        <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"></path>
-                                <path fill-rule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"></path>
-                            </svg>
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <a href="/" class="flex items-center space-x-2">
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                         </div>
-                        <span class="ml-3 text-2xl font-bold text-white">Drive Clone</span>
-                    </div>
+                        <span class="text-xl font-bold text-white">Drive Clone</span>
+                    </a>
                 </div>
-                <div class="hidden md:block">
-                    <div class="flex items-center space-x-6">
-                        <a href="/" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700/50 transition-colors">Home</a>
-                        <a href="/home" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700/50 transition-colors">Upload</a>
-                        <a href="/files" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700/50 transition-colors">My Files</a>
-                        <a href="/public-files" class="text-blue-400 px-4 py-2 rounded-lg text-sm font-medium bg-blue-500/20 border border-blue-500/30">Public Gallery</a>
-                        <a href="/user/login" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700/50 transition-colors">Login</a>
-                        <a href="/user/register" class="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2 rounded-lg text-sm font-medium hover:from-blue-700 hover:to-purple-700 glow-button transition-colors">Sign Up</a>
-                    </div>
+                <div class="hidden md:flex items-center space-x-2">
+                    <a href="/home" class="text-gray-300 hover:bg-gray-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Upload</a>
+                    <a href="/files" class="text-gray-300 hover:bg-gray-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">My Files</a>
+                    <a href="/public-files" class="bg-gray-800 text-white px-3 py-2 rounded-md text-sm font-medium">Public Gallery</a>
+                    <% if (user) { %>
+                        <button onclick="logout()" class="text-gray-300 hover:bg-red-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Logout</button>
+                    <% } else { %>
+                        <a href="/user/login" class="text-gray-300 hover:bg-gray-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Login</a>
+                        <a href="/user/register" class="ml-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">Sign Up</a>
+                    <% } %>
                 </div>
-                <!-- Mobile menu button -->
                 <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-gray-300 hover:text-white p-2">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
+                    <button id="mobile-menu-button" class="text-gray-400 hover:text-white p-2">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m4-6h16"></path></svg>
                     </button>
                 </div>
             </div>
         </div>
-        <!-- Mobile menu -->
-        <div id="mobile-menu" class="md:hidden hidden bg-gray-800/80 backdrop-blur-lg border-t border-gray-700">
-            <div class="px-4 pt-4 pb-6 space-y-2">
-                <a href="/" class="text-gray-300 hover:text-white block px-4 py-3 text-base font-medium hover:bg-gray-700/50 rounded-lg transition-colors">Home</a>
-                <a href="/home" class="text-gray-300 hover:text-white block px-4 py-3 text-base font-medium hover:bg-gray-700/50 rounded-lg transition-colors">Upload</a>
-                <a href="/files" class="text-gray-300 hover:text-white block px-4 py-3 text-base font-medium hover:bg-gray-700/50 rounded-lg transition-colors">My Files</a>
-                <a href="/public-files" class="text-blue-400 block px-4 py-3 text-base font-medium bg-blue-500/20 rounded-lg">Public Gallery</a>
-                <a href="/user/login" class="text-gray-300 hover:text-white block px-4 py-3 text-base font-medium hover:bg-gray-700/50 rounded-lg transition-colors">Login</a>
-                <a href="/user/register" class="text-gray-300 hover:text-white block px-4 py-3 text-base font-medium hover:bg-gray-700/50 rounded-lg transition-colors">Sign Up</a>
+        <div id="mobile-menu" class="md:hidden hidden bg-gray-900 border-t border-gray-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="/home" class="text-gray-300 hover:bg-gray-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors">Upload</a>
+                <a href="/files" class="text-gray-300 hover:bg-gray-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors">My Files</a>
+                <a href="/public-files" class="bg-gray-800 text-white block px-3 py-2 rounded-md text-base font-medium">Public Gallery</a>
+                 <% if (user) { %>
+                    <button onclick="logout()" class="text-gray-300 hover:bg-red-800 hover:text-white block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors">Logout</button>
+                <% } else { %>
+                    <a href="/user/login" class="text-gray-300 hover:bg-gray-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors">Login</a>
+                    <a href="/user/register" class="text-gray-300 hover:bg-gray-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors">Sign Up</a>
+                <% } %>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 relative z-10">
-        <!-- Hero Section -->
+    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
         <div class="text-center mb-12">
-            <h1 class="text-5xl font-bold text-white mb-4">
-                Public
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-cyan-400 to-blue-600">
-                    Gallery
-                </span>
-            </h1>
-            <p class="text-gray-300 text-xl mb-8 max-w-3xl mx-auto">
-                Discover and download amazing files shared by our global community. From documents to media, explore what others have made public.
-            </p>
-            
-            <!-- Quick Actions -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                <a href="/user/register" class="group bg-gradient-to-r from-cyan-500 to-blue-600 text-white px-6 py-3 rounded-xl text-lg font-semibold hover:from-cyan-600 hover:to-blue-700 glow-button transition-all duration-300 transform hover:scale-105">
-                    <span class="flex items-center justify-center">
-                        <svg class="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        Join & Share Files
-                    </span>
-                </a>
-                <a href="/user/login" class="group bg-transparent border-2 border-purple-400 text-purple-400 px-6 py-3 rounded-xl text-lg font-semibold hover:bg-purple-400 hover:text-white transition-all duration-300 backdrop-blur-sm">
-                    <span class="flex items-center justify-center">
-                        <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"></path>
-                        </svg>
-                        Login to Upload
-                    </span>
-                </a>
-            </div>
+            <h1 class="text-5xl font-bold text-white">Public Gallery</h1>
+            <p class="mt-4 text-lg text-gray-400 max-w-3xl mx-auto">Discover files shared by our community. Explore, download, and get inspired.</p>
         </div>
 
         <!-- Gallery Section -->
-        <div class="glass-card rounded-3xl shadow-2xl overflow-hidden">
-            <!-- Stats Header -->
-            <div class="px-8 py-6 border-b border-gray-700/50">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div>
-                        <h2 class="text-2xl font-bold text-white mb-2">Community Files</h2>
-                        <p class="text-gray-400">Explore files shared publicly by our users</p>
-                    </div>
-                    <div class="flex items-center space-x-6">
-                        <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl px-6 py-3 border border-gray-600">
-                            <div class="text-2xl font-bold text-cyan-400" id="file-count">0</div>
-                            <div class="text-sm text-gray-400">Public Files</div>
-                        </div>
-                    </div>
-                </div>
+        <div class="bg-gray-900 rounded-lg border border-gray-800 shadow-lg">
+            <div class="px-6 py-4 border-b border-gray-800">
+                <h2 class="text-xl font-semibold text-white">Community Showcase</h2>
+                <p class="text-gray-400 text-sm mt-1"><span id="file-count" class="font-bold">0</span> public files available</p>
             </div>
 
             <!-- Loading State -->
-            <div id="loading" class="flex flex-col items-center justify-center py-20">
-                <div class="relative mb-6">
-                    <div class="w-20 h-20 rounded-full border-4 border-gray-700 border-t-cyan-500 animate-spin"></div>
-                    <div class="pulse-ring w-20 h-20 absolute inset-0"></div>
-                </div>
-                <p class="text-gray-400 text-lg">Discovering amazing files...</p>
+            <div id="loading" class="flex items-center justify-center py-24">
+                <div class="w-12 h-12 border-4 border-gray-700 border-t-blue-500 rounded-full animate-spin"></div>
+                <p class="ml-4 text-gray-400">Loading public files...</p>
             </div>
 
             <!-- Empty State -->
-            <div id="no-files" class="hidden text-center py-20">
-                <div class="w-24 h-24 mx-auto mb-8 bg-gradient-to-r from-cyan-500/20 to-blue-600/20 rounded-full flex items-center justify-center">
-                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                    </svg>
+            <div id="no-files" class="hidden text-center py-24">
+                <svg class="mx-auto h-12 w-12 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9V3m0 18a9 9 0 009-9m-9 9a9 9 0 00-9-9" /></svg>
+                <h3 class="mt-2 text-lg font-medium text-white">The gallery is empty</h3>
+                <p class="mt-1 text-sm text-gray-400">Be the first to share a file with the community!</p>
+                <div class="mt-6">
+                    <a href="/user/register" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+                        Join Now & Share
+                    </a>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-4">No Public Files Yet</h3>
-                <p class="text-gray-400 text-lg mb-8 max-w-md mx-auto">Be the first to share! Join our community and upload your first public file to inspire others.</p>
-                <a href="/user/register" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-semibold rounded-xl glow-button hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 transform hover:scale-105">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                    </svg>
-                    Join the Community
-                </a>
             </div>
 
             <!-- Files Gallery -->
-            <div id="files-gallery" class="hidden p-8">
-                <div class="masonry-grid" id="files-container">
-                    <!-- Files will be populated here -->
+            <div id="files-gallery" class="hidden p-6">
+                <div id="files-container" class="masonry-grid">
+                    <!-- File cards will be populated here -->
                 </div>
             </div>
         </div>
     </main>
 
     <!-- Notification Container -->
-    <div id="notifications" class="fixed top-4 right-4 z-50 space-y-2"></div>
+    <div id="notifications" class="fixed top-5 right-5 z-50 space-y-3"></div>
 
     <script>
-        // Utility Functions
-        function formatFileSize(bytes) {
+        // --- UTILITY FUNCTIONS ---
+        const formatFileSize = bytes => {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
             const sizes = ['Bytes', 'KB', 'MB', 'GB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
+            return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+        };
 
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString('en-US', { 
-                year: 'numeric', 
-                month: 'short', 
-                day: 'numeric'
-            });
-        }
+        const formatDate = dateString => new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 
-        function getFileIcon(mimetype, size = 'w-8 h-8') {
-            if (mimetype.startsWith('image/')) {
-                return `<svg class="${size} text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                </svg>`;
-            } else if (mimetype.includes('pdf')) {
-                return `<svg class="${size} text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>`;
-            } else if (mimetype.includes('video/')) {
-                return `<svg class="${size} text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                </svg>`;
-            } else if (mimetype.includes('audio/')) {
-                return `<svg class="${size} text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path>
-                </svg>`;
-            } else if (mimetype.includes('zip') || mimetype.includes('rar')) {
-                return `<svg class="${size} text-orange-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
-                </svg>`;
-            } else {
-                return `<svg class="${size} text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                </svg>`;
-            }
-        }
+        const getFileIcon = (mimetype) => {
+            const iconColor = "text-blue-400";
+            if (mimetype.startsWith('image/')) return `<svg class="w-8 h-8 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>`;
+            if (mimetype.includes('pdf')) return `<svg class="w-8 h-8 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>`;
+            if (mimetype.includes('video/')) return `<svg class="w-8 h-8 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>`;
+            if (mimetype.includes('audio/')) return `<svg class="w-8 h-8 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"></path></svg>`;
+            if (mimetype.includes('zip') || mimetype.includes('rar')) return `<svg class="w-8 h-8 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10l8 4 8-4V7M4 7L12 3l8 4M4 7l8 4m0 0l8-4m-8 4v10"></path></svg>`;
+            return `<svg class="w-8 h-8 ${iconColor}" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z"></path></svg>`;
+        };
 
-        // Notification System
-        function showNotification(message, type = 'info', duration = 5000) {
-            const notificationContainer = document.getElementById('notifications');
+        const showNotification = (message, isError = false) => {
+            const container = document.getElementById('notifications');
             const notification = document.createElement('div');
-            
-            const colors = {
-                success: 'bg-green-500/20 border-green-500/30 text-green-300',
-                error: 'bg-red-500/20 border-red-500/30 text-red-300',
-                info: 'bg-blue-500/20 border-blue-500/30 text-blue-300',
-                warning: 'bg-yellow-500/20 border-yellow-500/30 text-yellow-300'
-            };
+            notification.className = `px-4 py-3 rounded-md shadow-lg text-sm font-medium ${isError ? 'bg-red-600 text-white' : 'bg-blue-600 text-white'}`;
+            notification.textContent = message;
+            container.appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        };
 
-            notification.className = `px-6 py-4 rounded-xl backdrop-blur-sm border transition-all duration-300 transform translate-x-full ${colors[type]}`;
-            notification.innerHTML = `
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        ${type === 'success' 
-                            ? '<path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>'
-                            : '<path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>'
-                        }
-                    </svg>
-                    <span>${message}</span>
-                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-current opacity-70 hover:opacity-100">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
-                    </button>
-                </div>
-            `;
-            
-            notificationContainer.appendChild(notification);
-            
-            // Animate in
-            setTimeout(() => {
-                notification.classList.remove('translate-x-full');
-            }, 100);
-            
-            // Auto remove
-            setTimeout(() => {
-                notification.classList.add('translate-x-full');
-                setTimeout(() => notification.remove(), 300);
-            }, duration);
-        }
+        // --- API & RENDERING ---
+        const renderFiles = (files) => {
+            const container = document.getElementById('files-container');
+            container.innerHTML = '';
+            files.forEach(file => {
+                const card = document.createElement('div');
+                card.className = 'masonry-item bg-gray-800 rounded-lg p-5 border border-gray-700 hover:border-blue-500 transition-all duration-300';
+                card.innerHTML = `
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="p-3 bg-gray-900 rounded-lg">${getFileIcon(file.mimetype)}</div>
+                        <div class="text-right">
+                            <div class="text-sm text-gray-300">by ${file.uploadedBy.name}</div>
+                            <div class="text-xs text-gray-500">${formatDate(file.uploadDate)}</div>
+                        </div>
+                    </div>
+                    <h3 class="text-lg font-bold text-white truncate mb-2" title="${file.originalName}">${file.originalName}</h3>
+                    <p class="text-sm text-gray-400 mb-4 h-10 overflow-hidden">${file.description || 'No description available.'}</p>
+                    <div class="flex justify-between items-center text-xs text-gray-500 mb-4">
+                        <span>${formatFileSize(file.size)}</span>
+                        <span>${file.downloadCount} downloads</span>
+                    </div>
+                    <div class="flex gap-2">
+                        <a href="/download/${file._id}" class="flex-1 text-center bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-md text-sm font-semibold transition-colors">Download</a>
+                        <button onclick="copyShareLink('${file._id}', '${file.originalName.replace(/'/g, "\\'")}')" class="bg-gray-700 hover:bg-gray-600 text-gray-300 px-3 py-2 rounded-md text-sm transition-colors">Copy Link</button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        };
 
-        // File Actions
-        async function copyShareLink(fileId, fileName) {
-            const shareLink = `${window.location.origin}/download/${fileId}`;
-            
-            try {
-                await navigator.clipboard.writeText(shareLink);
-                showNotification(`Share link for "${fileName}" copied to clipboard!`, 'success');
-            } catch (error) {
-                // Fallback for older browsers
-                const textArea = document.createElement('textarea');
-                textArea.value = shareLink;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                
-                showNotification(`Share link copied: ${shareLink}`, 'success');
-            }
-        }
-
-        // Load Public Files
-        async function loadPublicFiles() {
+        const loadPublicFiles = async () => {
             try {
                 const response = await fetch('/public-files-api');
+                if (!response.ok) throw new Error('Failed to fetch files');
                 const result = await response.json();
 
                 document.getElementById('loading').classList.add('hidden');
-
                 if (result.success && result.files.length > 0) {
                     document.getElementById('file-count').textContent = result.files.length;
                     document.getElementById('files-gallery').classList.remove('hidden');
@@ -438,90 +200,35 @@
                 }
             } catch (error) {
                 console.error('Error loading public files:', error);
-                document.getElementById('loading').innerHTML = `
-                    <div class="text-center py-20">
-                        <div class="w-16 h-16 mx-auto mb-4 bg-red-500/20 rounded-full flex items-center justify-center">
-                            <svg class="w-8 h-8 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                            </svg>
-                        </div>
-                        <p class="text-red-400 text-lg">Error loading files</p>
-                        <button onclick="loadPublicFiles()" class="mt-4 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl transition-colors">
-                            Retry
-                        </button>
-                    </div>
-                `;
+                document.getElementById('loading').innerHTML = '<p class="text-red-500 text-center py-24">Failed to load public files. Please try again later.</p>';
             }
-        }
+        };
 
-        function renderFiles(files) {
-            const container = document.getElementById('files-container');
-            container.innerHTML = '';
-
-            files.forEach(file => {
-                const fileCard = document.createElement('div');
-                fileCard.className = 'masonry-item gallery-card rounded-2xl p-6 transition-all duration-500';
-                
-                const cardHeight = Math.random() * 100 + 200; // Random height for masonry effect
-                
-                fileCard.innerHTML = `
-                    <div class="flex items-start justify-between mb-6">
-                        <div class="p-4 bg-gray-800/50 rounded-xl">
-                            ${getFileIcon(file.mimetype, 'w-10 h-10')}
-                        </div>
-                        <div class="text-right">
-                            <div class="text-xs text-gray-400 mb-1">by ${file.uploadedBy.name}</div>
-                            <div class="text-xs text-gray-500">${formatDate(file.uploadDate)}</div>
-                        </div>
-                    </div>
-                    
-                    <div class="mb-6">
-                        <h3 class="text-xl font-bold text-white mb-3 leading-tight" title="${file.originalName}">
-                            ${file.originalName}
-                        </h3>
-                        <div class="flex items-center justify-between text-sm text-gray-400 mb-4">
-                            <span>${formatFileSize(file.size)}</span>
-                            <span class="flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                                </svg>
-                                ${file.downloadCount}
-                            </span>
-                        </div>
-                        ${file.description ? `<p class="text-gray-300 text-sm leading-relaxed mb-4">${file.description}</p>` : ''}
-                    </div>
-                    
-                    <div class="flex gap-3">
-                        <a href="/download/${file._id}" class="flex-1 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-600 hover:to-blue-700 text-white px-4 py-3 rounded-xl text-sm font-semibold text-center transition-all duration-300 transform hover:scale-105 flex items-center justify-center">
-                            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                            </svg>
-                            Download
-                        </a>
-                        <button onclick="copyShareLink('${file._id}', '${file.originalName.replace(/'/g, "\\'")}')" class="bg-gray-700/50 hover:bg-gray-600/50 text-gray-300 hover:text-white px-4 py-3 rounded-xl text-sm font-semibold transition-all duration-300 border border-gray-600/30 hover:border-gray-500/50">
-                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"></path>
-                            </svg>
-                        </button>
-                    </div>
-                `;
-                
-                container.appendChild(fileCard);
+        const copyShareLink = (fileId, fileName) => {
+            const link = `${window.location.origin}/download/${fileId}`;
+            navigator.clipboard.writeText(link).then(() => {
+                showNotification(`Link for "${fileName}" copied!`);
+            }).catch(() => {
+                showNotification('Failed to copy link.', true);
             });
-        }
-
-        // Initialize
-        document.addEventListener('DOMContentLoaded', loadPublicFiles);
-
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
+        };
         
-        if (mobileMenuButton) {
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
+        window.logout = async () => {
+            try {
+                await fetch('/user/logout', { method: 'POST' });
+            } finally {
+                window.location.href = '/';
+            }
+        };
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPublicFiles();
+
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            menuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        });
     </script>
 </body>
 </html>

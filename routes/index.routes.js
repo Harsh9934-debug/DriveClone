@@ -28,7 +28,7 @@ router.get('/my-files', auth, (req, res) => {
 
 // Route to display public files page
 router.get('/public-files', (req, res) => {
-    res.render('public-files');
+    res.render('public-files', { user: req.user || null });
 });
 
 // API route to get public files

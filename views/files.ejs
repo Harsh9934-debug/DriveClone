@@ -1,257 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Files - Drive Clone</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <title>My Files - Drive Clone</title>
     <style>
-        * {
+        body {
             font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
         }
-        
-        .dark-gradient-bg {
-            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #1a1a2e 100%);
-            background-size: 400% 400%;
-            animation: gradientShift 20s ease infinite;
-        }
-        
-        @keyframes gradientShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        
-        .floating {
-            animation: float 8s ease-in-out infinite;
-        }
-        
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-25px); }
-        }
-        
-        .glass-card {
-            background: rgba(17, 25, 40, 0.6);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        
-        .particle {
-            position: absolute;
-            background: linear-gradient(45deg, #3b82f6, #8b5cf6, #06b6d4);
-            border-radius: 50%;
-            pointer-events: none;
-            animation: particles 30s linear infinite;
-        }
-        
-        @keyframes particles {
-            0% {
-                transform: translateY(100vh) translateX(0) rotate(0deg);
-                opacity: 0;
-            }
-            10% {
-                opacity: 1;
-            }
-            90% {
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(-100vh) translateX(200px) rotate(720deg);
-                opacity: 0;
-            }
-        }
-        
-        .file-card {
-            background: rgba(17, 25, 40, 0.5);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            transition: all 0.3s ease;
-        }
-        
-        .file-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border-color: rgba(59, 130, 246, 0.3);
-        }
-        
-        .glow-button {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
-            transition: all 0.3s ease;
-        }
-        
-        .glow-button:hover {
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.5), 0 0 40px rgba(59, 130, 246, 0.3);
-        }
+        .bg-gray-900 { background-color: #1a1a1a; }
+        .bg-gray-800 { background-color: #2a2a2a; }
+        .border-gray-700 { border-color: #333333; }
+        .border-gray-800 { border-color: #444444; }
+        .table-fixed-layout { table-layout: fixed; }
     </style>
 </head>
-<body class="dark-gradient-bg min-h-screen relative overflow-x-hidden">
-    <!-- Animated Background Particles -->
-    <div class="particle w-2 h-2" style="left: 5%; animation-delay: 0s;"></div>
-    <div class="particle w-1 h-1" style="left: 15%; animation-delay: 8s;"></div>
-    <div class="particle w-3 h-3" style="left: 25%; animation-delay: 16s;"></div>
-    <div class="particle w-2 h-2" style="left: 35%; animation-delay: 24s;"></div>
-    <div class="particle w-1 h-1" style="left: 45%; animation-delay: 4s;"></div>
-    <div class="particle w-2 h-2" style="left: 55%; animation-delay: 12s;"></div>
-    <div class="particle w-1 h-1" style="left: 65%; animation-delay: 20s;"></div>
-    <div class="particle w-3 h-3" style="left: 75%; animation-delay: 28s;"></div>
-    <div class="particle w-2 h-2" style="left: 85%; animation-delay: 6s;"></div>
-    <div class="particle w-1 h-1" style="left: 95%; animation-delay: 14s;"></div>
-    
-    <!-- Background Blurs -->
-    <div class="absolute inset-0 overflow-hidden">
-        <div class="absolute top-1/4 left-1/6 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl floating"></div>
-        <div class="absolute bottom-1/4 right-1/6 w-80 h-80 bg-purple-500/10 rounded-full blur-3xl floating" style="animation-delay: 5s;"></div>
-        <div class="absolute top-3/4 left-3/4 w-64 h-64 bg-cyan-500/5 rounded-full blur-3xl floating" style="animation-delay: 10s;"></div>
-    </div>
+<body class="min-h-screen">
 
     <!-- Navigation -->
-    <nav class="glass-card border-b border-gray-700/50 relative z-10">
+    <nav class="bg-gray-900 border-b border-gray-800 sticky top-0 z-30">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center py-6">
-                <div class="flex items-center">
-                    <div class="flex items-center mr-4">
-                        <div class="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M4 3a2 2 0 100 4h12a2 2 0 100-4H4z"></path>
-                                <path fill-rule="evenodd" d="M3 8h14v7a2 2 0 01-2 2H5a2 2 0 01-2-2V8zm5 3a1 1 0 011-1h2a1 1 0 110 2H9a1 1 0 01-1-1z" clip-rule="evenodd"></path>
-                            </svg>
+            <div class="flex justify-between items-center py-4">
+                <div class="flex items-center space-x-4">
+                    <a href="/home" class="flex items-center space-x-2">
+                        <div class="w-10 h-10 bg-blue-600 rounded-lg flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"></path></svg>
                         </div>
-                        <span class="ml-3 text-2xl font-bold text-white">Drive Clone</span>
-                    </div>
+                        <span class="text-xl font-bold text-white">Drive Clone</span>
+                    </a>
                 </div>
-                <div class="hidden md:block">
-                    <div class="flex items-center space-x-6">
-                        <a href="/home" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700/50 transition-colors">Upload</a>
-                        <a href="/files" class="text-blue-400 px-4 py-2 rounded-lg text-sm font-medium bg-blue-500/20 border border-blue-500/30">My Files</a>
-                        <a href="/public-files" class="text-gray-300 hover:text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-700/50 transition-colors">Public Gallery</a>
-                        <button onclick="logout()" class="text-gray-300 hover:text-red-400 px-4 py-2 rounded-lg text-sm font-medium hover:bg-red-500/20 transition-colors">Logout</button>
-                    </div>
+                <div class="hidden md:flex items-center space-x-2">
+                    <a href="/home" class="text-gray-300 hover:bg-gray-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Upload</a>
+                    <a href="/files" class="bg-gray-800 text-white px-3 py-2 rounded-md text-sm font-medium">My Files</a>
+                    <a href="/public-files" class="text-gray-300 hover:bg-gray-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Public Gallery</a>
+                    <button onclick="logout()" class="text-gray-300 hover:bg-red-800 hover:text-white px-3 py-2 rounded-md text-sm font-medium transition-colors">Logout</button>
                 </div>
-                <!-- Mobile menu button -->
                 <div class="md:hidden">
-                    <button id="mobile-menu-button" class="text-gray-300 hover:text-white p-2">
-                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-                        </svg>
+                    <button id="mobile-menu-button" class="text-gray-400 hover:text-white p-2">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m4-6h16"></path></svg>
                     </button>
                 </div>
             </div>
         </div>
-        <!-- Mobile menu -->
-        <div id="mobile-menu" class="md:hidden hidden bg-gray-800/80 backdrop-blur-lg border-t border-gray-700">
-            <div class="px-4 pt-4 pb-6 space-y-2">
-                <a href="/home" class="text-gray-300 hover:text-white block px-4 py-3 text-base font-medium hover:bg-gray-700/50 rounded-lg transition-colors">Upload</a>
-                <a href="/files" class="text-blue-400 block px-4 py-3 text-base font-medium bg-blue-500/20 rounded-lg">My Files</a>
-                <a href="/public-files" class="text-gray-300 hover:text-white block px-4 py-3 text-base font-medium hover:bg-gray-700/50 rounded-lg transition-colors">Public Gallery</a>
-                <button onclick="logout()" class="text-gray-300 hover:text-red-400 block px-4 py-3 text-base font-medium w-full text-left hover:bg-red-500/20 rounded-lg transition-colors">Logout</button>
+        <div id="mobile-menu" class="md:hidden hidden bg-gray-900 border-t border-gray-800">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="/home" class="text-gray-300 hover:bg-gray-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors">Upload</a>
+                <a href="/files" class="bg-gray-800 text-white block px-3 py-2 rounded-md text-base font-medium">My Files</a>
+                <a href="/public-files" class="text-gray-300 hover:bg-gray-800 hover:text-white block px-3 py-2 rounded-md text-base font-medium transition-colors">Public Gallery</a>
+                <button onclick="logout()" class="text-gray-300 hover:bg-red-800 hover:text-white block w-full text-left px-3 py-2 rounded-md text-base font-medium transition-colors">Logout</button>
             </div>
         </div>
     </nav>
 
     <!-- Main Content -->
-    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8 relative z-10">
-        <!-- Header Section -->
-        <div class="text-center mb-12">
-            <h1 class="text-5xl font-bold text-white mb-4">
-                Your Digital
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-purple-600">
-                    Vault
-                </span>
-            </h1>
-            <p class="text-gray-300 text-xl mb-8 max-w-3xl mx-auto">
-                Manage, organize, and share your files with enterprise-grade security and lightning-fast access
-            </p>
-            
-            <!-- Quick Actions -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-                <a href="/home" class="group bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-xl text-lg font-semibold hover:from-blue-700 hover:to-purple-700 glow-button transition-all duration-300 transform hover:scale-105">
-                    <span class="flex items-center justify-center">
-                        <svg class="w-5 h-5 mr-2 group-hover:-translate-y-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
-                        </svg>
-                        Upload New File
-                    </span>
-                </a>
-                <a href="/public-files" class="group bg-transparent border-2 border-cyan-400 text-cyan-400 px-6 py-3 rounded-xl text-lg font-semibold hover:bg-cyan-400 hover:text-white transition-all duration-300 backdrop-blur-sm">
-                    <span class="flex items-center justify-center">
-                        <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064"></path>
-                        </svg>
-                        Browse Public Gallery
-                    </span>
-                </a>
-            </div>
+    <main class="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center mb-8">
+            <h1 class="text-4xl font-bold text-white">Your Files</h1>
+            <a href="/home" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
+                Upload New File
+            </a>
         </div>
 
         <!-- Files Section -->
-        <div class="glass-card rounded-3xl shadow-2xl overflow-hidden">
-            <!-- Stats Header -->
-            <div class="px-8 py-6 border-b border-gray-700/50">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div>
-                        <h2 class="text-2xl font-bold text-white mb-2">Your Files</h2>
-                        <p class="text-gray-400">Manage your uploaded files and privacy settings</p>
-                    </div>
-                    <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl px-6 py-3 border border-gray-600">
-                        <div class="text-2xl font-bold text-blue-400" id="file-count">0</div>
-                        <div class="text-sm text-gray-400">Total Files</div>
-                    </div>
+        <div class="bg-gray-900 rounded-lg border border-gray-800 shadow-lg overflow-hidden">
+            <div class="px-6 py-4 border-b border-gray-800 flex justify-between items-center">
+                <div>
+                    <h2 class="text-xl font-semibold text-white">File Management</h2>
+                    <p class="text-gray-400 text-sm mt-1">You have <span id="file-count" class="font-bold">0</span> files.</p>
                 </div>
             </div>
 
             <!-- Loading State -->
-            <div id="loading" class="flex flex-col items-center justify-center py-16">
-                <div class="relative">
-                    <div class="w-16 h-16 border-4 border-gray-700 border-t-blue-500 rounded-full animate-spin"></div>
-                    <div class="absolute inset-0 w-16 h-16 border-4 border-transparent border-r-purple-500 rounded-full animate-spin" style="animation-delay: 0.5s;"></div>
-                </div>
-                <p class="mt-6 text-gray-400 text-lg">Loading your files...</p>
+            <div id="loading" class="flex items-center justify-center py-16">
+                <div class="w-12 h-12 border-4 border-gray-700 border-t-blue-500 rounded-full animate-spin"></div>
+                <p class="ml-4 text-gray-400">Loading your files...</p>
             </div>
 
             <!-- Empty State -->
-            <div id="no-files" class="hidden text-center py-20">
-                <div class="w-24 h-24 mx-auto mb-8 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-full flex items-center justify-center">
-                    <svg class="w-12 h-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
-                    </svg>
+            <div id="no-files" class="hidden text-center py-16">
+                <svg class="mx-auto h-12 w-12 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true"><path vector-effect="non-scaling-stroke" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 13h6m-3-3v6m-9 1V7a2 2 0 012-2h6l2 2h6a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2z" /></svg>
+                <h3 class="mt-2 text-lg font-medium text-white">No files yet</h3>
+                <p class="mt-1 text-sm text-gray-400">Get started by uploading a new file.</p>
+                <div class="mt-6">
+                    <a href="/home" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                        Upload File
+                    </a>
                 </div>
-                <h3 class="text-2xl font-bold text-white mb-4">No Files Yet</h3>
-                <p class="text-gray-400 text-lg mb-8 max-w-md mx-auto">Your secure vault is empty. Start by uploading your first file to get organized.</p>
-                <a href="/home" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 text-white font-semibold rounded-xl glow-button hover:from-blue-700 hover:to-purple-700 transition-all duration-300 transform hover:scale-105">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                    </svg>
-                    Upload Your First File
-                </a>
             </div>
 
-            <!-- Files Grid -->
-            <div id="files-grid" class="hidden p-8">
-                <div id="files-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    <!-- Files will be populated here -->
-                </div>
+            <!-- Files Table -->
+            <div id="files-table-container" class="hidden overflow-x-auto">
+                <table class="min-w-full divide-y divide-gray-800 table-fixed-layout">
+                    <thead class="bg-gray-800">
+                        <tr>
+                            <th scope="col" class="w-2/5 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">File Name</th>
+                            <th scope="col" class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Size</th>
+                            <th scope="col" class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Status</th>
+                            <th scope="col" class="w-1/5 px-6 py-3 text-left text-xs font-medium text-gray-300 uppercase tracking-wider">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="files-tbody" class="bg-gray-900 divide-y divide-gray-800">
+                        <!-- Rows will be populated here -->
+                    </tbody>
+                </table>
             </div>
         </div>
     </main>
 
     <!-- File Action Modal -->
     <div id="file-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="glass-card rounded-3xl shadow-2xl w-full max-w-md">
-            <div class="p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl font-bold text-white">File Actions</h3>
-                    <button onclick="closeModal()" class="text-gray-400 hover:text-white p-2 rounded-lg hover:bg-gray-700/50 transition-colors">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                        </svg>
+        <div class="bg-gray-900 border border-gray-700 rounded-lg shadow-xl w-full max-w-lg">
+            <div class="p-6">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-semibold text-white" id="modal-file-name">File Details</h3>
+                    <button onclick="closeModal()" class="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700 transition-colors">
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
                     </button>
                 </div>
-                
-                <div id="modal-content" class="space-y-4">
+                <div id="modal-content" class="space-y-4 text-sm">
                     <!-- Dynamic content will be loaded here -->
                 </div>
             </div>
@@ -259,178 +133,204 @@
     </div>
 
     <!-- Notification Container -->
-    <div id="notifications" class="fixed top-4 right-4 z-50 space-y-2"></div>
+    <div id="notifications" class="fixed top-5 right-5 z-50 space-y-3"></div>
 
     <script>
-        // Function to format file size
-        function formatFileSize(bytes) {
+        // --- UTILITY FUNCTIONS ---
+        const formatFileSize = bytes => {
             if (bytes === 0) return '0 Bytes';
             const k = 1024;
             const sizes = ['Bytes', 'KB', 'MB', 'GB'];
             const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
+            return `${parseFloat((bytes / Math.pow(k, i)).toFixed(2))} ${sizes[i]}`;
+        };
 
-        // Function to format date
-        function formatDate(dateString) {
-            const date = new Date(dateString);
-            return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
-        }
+        const formatDate = dateString => new Date(dateString).toLocaleString();
 
-        // Function to get file icon based on mimetype
-        function getFileIcon(mimetype) {
-            if (mimetype.startsWith('image/')) {
-                return '🖼️';
-            } else if (mimetype.includes('pdf')) {
-                return '📄';
-            } else if (mimetype.includes('word') || mimetype.includes('document')) {
-                return '📝';
-            } else if (mimetype.includes('spreadsheet') || mimetype.includes('excel')) {
-                return '📊';
-            } else if (mimetype.includes('zip') || mimetype.includes('rar')) {
-                return '📦';
-            } else {
-                return '📄';
-            }
-        }
+        const getFileIcon = mimetype => {
+            if (mimetype.startsWith('image/')) return '🖼️';
+            if (mimetype.includes('pdf')) return '📄';
+            if (mimetype.includes('word') || mimetype.includes('document')) return '📝';
+            if (mimetype.includes('spreadsheet') || mimetype.includes('excel')) return '📊';
+            if (mimetype.includes('zip') || mimetype.includes('rar')) return '📦';
+            return '📄';
+        };
 
-        // Load files
-        async function loadFiles() {
+        const showNotification = (message, isError = false) => {
+            const notification = document.createElement('div');
+            notification.className = `px-4 py-3 rounded-md shadow-lg text-sm font-medium ${isError ? 'bg-red-600 text-white' : 'bg-blue-600 text-white'}`;
+            notification.textContent = message;
+            document.getElementById('notifications').appendChild(notification);
+            setTimeout(() => notification.remove(), 3000);
+        };
+
+        // --- API CALLS ---
+        const fetchFiles = async () => {
             try {
                 const response = await fetch('/files');
-                const result = await response.json();
-
-                document.getElementById('loading').classList.add('hidden');
-
-                if (result.success && result.files.length > 0) {
-                    document.getElementById('file-count').textContent = result.files.length;
-                    document.getElementById('files-table').classList.remove('hidden');
-                    
-                    const tbody = document.getElementById('files-tbody');
-                    tbody.innerHTML = '';
-
-                    result.files.forEach(file => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <div class="flex items-center">
-                                    <span class="text-2xl mr-3">${getFileIcon(file.mimetype)}</span>
-                                    <div>
-                                        <div class="text-sm font-medium text-gray-900">${file.originalName}</div>
-                                        <div class="text-sm text-gray-500">${file.mimetype}</div>
-                                        ${file.description ? `<div class="text-xs text-gray-400 mt-1">${file.description}</div>` : ''}
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                ${formatFileSize(file.size)}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap">
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${file.isPublic ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}">
-                                    ${file.isPublic ? '🌐 Public' : '🔒 Private'}
-                                </span>
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                ${formatDate(file.uploadDate)}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                                ${file.downloadCount}
-                            </td>
-                            <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                <a href="/download/${file._id}" class="text-indigo-600 hover:text-indigo-900 mr-4">Download</a>
-                                <button onclick="copyShareLink('${file._id}', ${file.isPublic})" class="text-green-600 hover:text-green-900 mr-4">Share</button>
-                                <button onclick="togglePrivacy('${file._id}', ${file.isPublic})" class="text-blue-600 hover:text-blue-900">
-                                    ${file.isPublic ? 'Make Private' : 'Make Public'}
-                                </button>
-                            </td>
-                        `;
-                        tbody.appendChild(row);
-                    });
-                } else {
-                    document.getElementById('no-files').classList.remove('hidden');
-                }
+                if (!response.ok) throw new Error('Network response was not ok');
+                return await response.json();
             } catch (error) {
-                console.error('Error loading files:', error);
-                document.getElementById('loading').innerHTML = '<p class="text-red-600">Error loading files</p>';
-            }
-        }
-
-        // Function to copy share link
-        function copyShareLink(fileId, isPublic) {
-            const shareLink = `${window.location.origin}/download/${fileId}`;
-            if (!isPublic) {
-                alert('Note: This file is private. Only you can access this link unless you make it public first.');
-            }
-            navigator.clipboard.writeText(shareLink).then(() => {
-                alert('Share link copied to clipboard!' + (isPublic ? '' : '\n\nNote: This file is private, so others cannot access it.'));
-            }).catch(() => {
-                alert('Share link: ' + shareLink + (isPublic ? '' : '\n\nNote: This file is private, so others cannot access it.'));
-            });
-        }
-
-        // Function to toggle file privacy
-        async function togglePrivacy(fileId, currentPublic) {
-            const action = currentPublic ? 'make private' : 'make public';
-            if (!confirm(`Are you sure you want to ${action} this file?`)) {
-                return;
-            }
-
-            try {
-                const response = await fetch(`/toggle-privacy/${fileId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                const result = await response.json();
-                
-                if (result.success) {
-                    alert(`File privacy updated successfully!`);
-                    loadFiles(); // Refresh the file list
-                } else {
-                    alert('Error: ' + result.message);
-                }
-            } catch (error) {
-                console.error('Error toggling privacy:', error);
-                alert('An error occurred. Please try again.');
-            }
-        }
-
-        // Load files when page loads
-        document.addEventListener('DOMContentLoaded', loadFiles);
-
-        // Mobile menu toggle
-        const mobileMenuButton = document.getElementById('mobile-menu-button');
-        const mobileMenu = document.getElementById('mobile-menu');
-        
-        if (mobileMenuButton) {
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-
-        // Logout functionality
-        window.logout = async function() {
-            if (confirm('Are you sure you want to logout?')) {
-                try {
-                    const response = await fetch('/user/logout', {
-                        method: 'POST',
-                        credentials: 'include'
-                    });
-                    
-                    if (response.ok) {
-                        window.location.href = '/';
-                    } else {
-                        // Force logout even if server request fails
-                        window.location.href = '/user/login';
-                    }
-                } catch (error) {
-                    // Force logout if there's an error
-                    window.location.href = '/user/login';
-                }
+                console.error('Error fetching files:', error);
+                showNotification('Error loading files. Please try again.', true);
+                return null;
             }
         };
+
+        const togglePrivacyAPI = async (fileId) => {
+            try {
+                const response = await fetch(`/toggle-privacy/${fileId}`, { method: 'POST' });
+                return await response.json();
+            } catch (error) {
+                console.error('Error toggling privacy:', error);
+                return { success: false, message: 'An error occurred.' };
+            }
+        };
+
+        const deleteFileAPI = async (fileId) => {
+            try {
+                const response = await fetch(`/delete/${fileId}`, { method: 'DELETE' });
+                return await response.json();
+            } catch (error) {
+                console.error('Error deleting file:', error);
+                return { success: false, message: 'An error occurred.' };
+            }
+        };
+
+        // --- UI RENDERING ---
+        const renderFiles = (files) => {
+            const tbody = document.getElementById('files-tbody');
+            tbody.innerHTML = '';
+            files.forEach(file => {
+                const row = document.createElement('tr');
+                row.className = 'hover:bg-gray-800 transition-colors';
+                row.innerHTML = `
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <div class="flex items-center">
+                            <span class="text-2xl mr-3">${getFileIcon(file.mimetype)}</span>
+                            <div>
+                                <div class="text-sm font-medium text-white truncate" style="max-width: 20vw;">${file.originalName}</div>
+                                <div class="text-xs text-gray-400">${formatDate(file.uploadDate)}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-400">${formatFileSize(file.size)}</td>
+                    <td class="px-6 py-4 whitespace-nowrap">
+                        <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${file.isPublic ? 'bg-green-200 text-green-800' : 'bg-gray-700 text-gray-300'}">
+                            ${file.isPublic ? '🌐 Public' : '🔒 Private'}
+                        </span>
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                        <button onclick="openFileModal('${file._id}')" class="text-blue-400 hover:text-blue-300">Details</button>
+                        <a href="/download/${file._id}" class="text-green-400 hover:text-green-300">Download</a>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        };
+
+        const updateUI = (files) => {
+            document.getElementById('loading').classList.add('hidden');
+            if (files && files.length > 0) {
+                document.getElementById('file-count').textContent = files.length;
+                document.getElementById('files-table-container').classList.remove('hidden');
+                document.getElementById('no-files').classList.add('hidden');
+                renderFiles(files);
+            } else {
+                document.getElementById('file-count').textContent = 0;
+                document.getElementById('files-table-container').classList.add('hidden');
+                document.getElementById('no-files').classList.remove('hidden');
+            }
+        };
+
+        // --- MODAL & ACTIONS ---
+        let filesCache = [];
+
+        const openFileModal = (fileId) => {
+            const file = filesCache.find(f => f._id === fileId);
+            if (!file) return;
+
+            document.getElementById('modal-file-name').textContent = file.originalName;
+            const modalContent = document.getElementById('modal-content');
+            const shareLink = `${window.location.origin}/download/${file._id}`;
+
+            modalContent.innerHTML = `
+                <p><strong class="text-gray-300">File Type:</strong> <span class="text-gray-400">${file.mimetype}</span></p>
+                <p><strong class="text-gray-300">Description:</strong> <span class="text-gray-400">${file.description || 'Not provided'}</span></p>
+                <p><strong class="text-gray-300">Downloads:</strong> <span class="text-gray-400">${file.downloadCount}</span></p>
+                <div>
+                    <strong class="text-gray-300">Share Link:</strong>
+                    <div class="mt-1 flex rounded-md shadow-sm">
+                        <input type="text" value="${shareLink}" readonly class="flex-1 block w-full rounded-none rounded-l-md sm:text-sm bg-gray-800 border-gray-600 text-gray-300 px-3 py-2">
+                        <button onclick="copyShareLink('${shareLink}', ${file.isPublic})" class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-600 bg-gray-700 text-sm font-medium text-gray-300 hover:bg-gray-600">Copy</button>
+                    </div>
+                    ${!file.isPublic ? `<p class="text-xs text-yellow-400 mt-1">Note: This file is private. Only you can use this link.</p>` : ''}
+                </div>
+                <div class="pt-4 flex justify-between items-center">
+                    <button onclick="handleTogglePrivacy('${file._id}')" class="px-4 py-2 text-sm font-medium rounded-md ${file.isPublic ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-green-600 hover:bg-green-700'} text-white">
+                        ${file.isPublic ? 'Make Private' : 'Make Public'}
+                    </button>
+                    <button onclick="handleDeleteFile('${file._id}')" class="px-4 py-2 text-sm font-medium rounded-md bg-red-700 hover:bg-red-800 text-white">Delete File</button>
+                </div>
+            `;
+            document.getElementById('file-modal').classList.remove('hidden');
+        };
+
+        const closeModal = () => document.getElementById('file-modal').classList.add('hidden');
+
+        const copyShareLink = (link, isPublic) => {
+            navigator.clipboard.writeText(link).then(() => {
+                let message = 'Share link copied to clipboard!';
+                if (!isPublic) message += ' Remember, the file is private.';
+                showNotification(message);
+            });
+        };
+
+        const handleTogglePrivacy = async (fileId) => {
+            const result = await togglePrivacyAPI(fileId);
+            showNotification(result.message, !result.success);
+            if (result.success) {
+                await loadAndRenderFiles();
+                closeModal();
+            }
+        };
+
+        const handleDeleteFile = async (fileId) => {
+            if (!confirm('Are you sure you want to permanently delete this file? This action cannot be undone.')) return;
+            const result = await deleteFileAPI(fileId);
+            showNotification(result.message, !result.success);
+            if (result.success) {
+                await loadAndRenderFiles();
+                closeModal();
+            }
+        };
+
+        // --- INITIALIZATION & LOGOUT ---
+        const loadAndRenderFiles = async () => {
+            const result = await fetchFiles();
+            if (result && result.success) {
+                filesCache = result.files;
+                updateUI(filesCache);
+            } else {
+                updateUI([]);
+            }
+        };
+
+        window.logout = async () => {
+            try {
+                await fetch('/user/logout', { method: 'POST' });
+            } finally {
+                window.location.href = '/';
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadAndRenderFiles();
+
+            const menuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            menuButton.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
+        });
     </script>
 </body>
 </html>
