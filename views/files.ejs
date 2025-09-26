@@ -187,6 +187,18 @@
             }
         };
 
+        const getShareLinks = async (fileId) => {
+            try {
+                const response = await fetch(`/share-links/${fileId}`);
+                if (!response.ok) throw new Error('Network response was not ok');
+                return await response.json();
+            } catch (error) {
+                console.error('Error fetching share links:', error);
+                showNotification('Error loading share links. Please try again.', true);
+                return null;
+            }
+        };
+
         const deleteFileAPI = async (fileId) => {
             try {
                 const response = await fetch(`/delete/${fileId}`, { method: 'DELETE' });
@@ -246,27 +258,48 @@
         // --- MODAL & ACTIONS ---
         let filesCache = [];
 
-        const openFileModal = (fileId) => {
+        const openFileModal = async (fileId) => {
             const file = filesCache.find(f => f._id === fileId);
             if (!file) return;
 
             document.getElementById('modal-file-name').textContent = file.originalName;
             const modalContent = document.getElementById('modal-content');
-            const shareLink = `${window.location.origin}/download/${file._id}`;
-
+            
+            // Basic file info
             modalContent.innerHTML = `
                 <p><strong class="text-gray-300">File Type:</strong> <span class="text-gray-400">${file.mimetype}</span></p>
                 <p><strong class="text-gray-300">Description:</strong> <span class="text-gray-400">${file.description || 'Not provided'}</span></p>
                 <p><strong class="text-gray-300">Downloads:</strong> <span class="text-gray-400">${file.downloadCount}</span></p>
+                
                 <div>
-                    <strong class="text-gray-300">Share Link:</strong>
+                    <strong class="text-gray-300">Direct Download Link:</strong>
                     <div class="mt-1 flex rounded-md shadow-sm">
-                        <input type="text" value="${shareLink}" readonly class="flex-1 block w-full rounded-none rounded-l-md sm:text-sm bg-gray-800 border-gray-600 text-gray-300 px-3 py-2">
-                        <button onclick="copyShareLink('${shareLink}', ${file.isPublic})" class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-600 bg-gray-700 text-sm font-medium text-gray-300 hover:bg-gray-600">Copy</button>
+                        <input type="text" value="${window.location.origin}/download/${file._id}" readonly class="flex-1 block w-full rounded-none rounded-l-md sm:text-sm bg-gray-800 border-gray-600 text-gray-300 px-3 py-2">
+                        <button onclick="copyShareLink('${window.location.origin}/download/${file._id}', ${file.isPublic})" class="inline-flex items-center px-3 rounded-r-md border border-l-0 border-gray-600 bg-gray-700 text-sm font-medium text-gray-300 hover:bg-gray-600">Copy</button>
                     </div>
                     ${!file.isPublic ? `<p class="text-xs text-yellow-400 mt-1">Note: This file is private. Only you can use this link.</p>` : ''}
                 </div>
-                <div class="pt-4 flex justify-between items-center">
+                
+                <!-- Shared Links Section -->
+                <div class="mt-6">
+                    <div class="flex items-center justify-between">
+                        <strong class="text-gray-300">Shareable Links:</strong>
+                        <button onclick="openCreateShareModal('${file._id}')" class="text-xs px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md">
+                            Create New Link
+                        </button>
+                    </div>
+                    <div id="share-links-container" class="mt-2">
+                        <div class="text-center py-2 text-sm text-gray-400">
+                            <svg class="animate-spin h-5 w-5 mx-auto mb-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            Loading share links...
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-6 flex justify-between items-center">
                     <button onclick="handleTogglePrivacy('${file._id}')" class="px-4 py-2 text-sm font-medium rounded-md ${file.isPublic ? 'bg-yellow-600 hover:bg-yellow-700' : 'bg-green-600 hover:bg-green-700'} text-white">
                         ${file.isPublic ? 'Make Private' : 'Make Public'}
                     </button>
@@ -274,6 +307,86 @@
                 </div>
             `;
             document.getElementById('file-modal').classList.remove('hidden');
+            
+            // Load share links
+            loadShareLinks(fileId);
+        };
+        
+        // Load share links for the file
+        const loadShareLinks = async (fileId) => {
+            const container = document.getElementById('share-links-container');
+            
+            try {
+                const result = await getShareLinks(fileId);
+                
+                if (!result || !result.success) {
+                    container.innerHTML = `
+                        <div class="text-center py-2 text-sm text-red-400">
+                            Failed to load share links.
+                        </div>
+                    `;
+                    return;
+                }
+                
+                const { shareLinks } = result;
+                
+                if (!shareLinks || shareLinks.length === 0) {
+                    container.innerHTML = `
+                        <div class="text-center py-2 text-sm text-gray-400">
+                            No shareable links yet. Create one to share with specific time limits.
+                        </div>
+                    `;
+                    return;
+                }
+                
+                // Render the share links
+                container.innerHTML = `
+                    <div class="space-y-3 mt-2 max-h-60 overflow-y-auto">
+                        ${shareLinks.map(link => `
+                            <div class="p-3 bg-gray-800 rounded-md border border-gray-700 ${!link.isValid ? 'opacity-60' : ''}">
+                                <div class="flex justify-between items-start">
+                                    <div>
+                                        <div class="mb-1 flex items-center">
+                                            <span class="inline-block w-2 h-2 rounded-full mr-2 ${link.isValid ? 'bg-green-500' : 'bg-red-500'}"></span>
+                                            <span class="text-sm font-medium ${link.isValid ? 'text-green-400' : 'text-red-400'}">
+                                                ${link.isValid ? 'Active' : (link.hasExpired ? 'Expired' : 'Inactive')}
+                                                ${link.oneTimeUse ? ' (One-time use)' : ''}
+                                            </span>
+                                        </div>
+                                        <div class="text-xs text-gray-400 mb-2">
+                                            Expires: ${new Date(link.expiresAt).toLocaleString()}
+                                        </div>
+                                        <div class="text-xs text-gray-500">
+                                            Used ${link.accessCount} times
+                                            ${link.lastAccessedAt ? `• Last access: ${new Date(link.lastAccessedAt).toLocaleString()}` : ''}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        ${link.isValid ? `
+                                            <button onclick="revokeShareLink('${link.id}')" class="text-xs px-2 py-1 bg-red-900 hover:bg-red-800 text-white rounded">
+                                                Revoke
+                                            </button>
+                                        ` : ''}
+                                    </div>
+                                </div>
+                                <div class="mt-2 flex rounded-md overflow-hidden">
+                                    <input type="text" value="${link.url}" readonly class="flex-1 block w-full text-xs bg-gray-900 border-gray-700 text-gray-300 px-2 py-1">
+                                    <button onclick="copyShareLink('${link.url}')" class="px-2 bg-gray-700 text-xs text-gray-300 hover:bg-gray-600">
+                                        Copy
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                `;
+            } catch (error) {
+                console.error('Error loading share links:', error);
+                container.innerHTML = `
+                    <div class="text-center py-2 text-sm text-red-400">
+                        Error loading share links. Please try again.
+                    </div>
+                `;
+            }
         };
 
         const closeModal = () => document.getElementById('file-modal').classList.add('hidden');
@@ -303,6 +416,78 @@
                 await loadAndRenderFiles();
                 closeModal();
             }
+        };
+        
+        // Create Share Link Modal
+        const openCreateShareModal = (fileId) => {
+            // Create a modal for setting share link properties
+            const file = filesCache.find(f => f._id === fileId);
+            if (!file) return;
+            
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4';
+            modal.id = 'create-share-modal';
+            
+            modal.innerHTML = `
+                <div class="bg-gray-900 border border-gray-700 rounded-lg shadow-xl w-full max-w-md">
+                    <div class="p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-semibold text-white">Create Shareable Link</h3>
+                            <button onclick="closeCreateShareModal()" class="text-gray-400 hover:text-white p-1 rounded-full hover:bg-gray-700 transition-colors">
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                            </button>
+                        </div>
+                        <form id="share-link-form" action="/create-share-link/${fileId}" method="POST">
+                            <div class="mb-6">
+                                <label for="expiresIn" class="block text-sm font-medium text-gray-300 mb-2">Link expires after</label>
+                                <select id="expiresIn" name="expiresIn" class="block w-full px-3 py-2 text-base bg-gray-800 border border-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500">
+                                    <option value="1">1 day</option>
+                                    <option value="3">3 days</option>
+                                    <option value="7" selected>7 days</option>
+                                    <option value="14">14 days</option>
+                                    <option value="30">30 days</option>
+                                </select>
+                            </div>
+                            
+                            <div class="mb-8">
+                                <div class="flex items-center">
+                                    <input type="checkbox" id="oneTimeUse" name="oneTimeUse" value="true" class="h-4 w-4 rounded bg-gray-800 border-gray-700 text-blue-600">
+                                    <label for="oneTimeUse" class="ml-2 block text-sm text-gray-300">
+                                        One-time use only (link becomes invalid after first access)
+                                    </label>
+                                </div>
+                            </div>
+                            
+                            <div class="flex justify-end space-x-3">
+                                <button type="button" onclick="closeCreateShareModal()" class="px-4 py-2 text-sm font-medium bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-md">
+                                    Cancel
+                                </button>
+                                <button type="submit" class="px-4 py-2 text-sm font-medium bg-blue-600 hover:bg-blue-700 text-white rounded-md">
+                                    Create Link
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        };
+        
+        const closeCreateShareModal = () => {
+            const modal = document.getElementById('create-share-modal');
+            if (modal) modal.remove();
+        };
+        
+        const revokeShareLink = (linkId) => {
+            if (!confirm('Are you sure you want to revoke this share link? Anyone with this link will no longer be able to access the file.')) return;
+            
+            // Create and submit a form to revoke the link
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = `/revoke-share-link/${linkId}`;
+            document.body.appendChild(form);
+            form.submit();
         };
 
         // --- INITIALIZATION & LOGOUT ---

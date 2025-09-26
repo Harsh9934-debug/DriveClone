@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success - DataVault</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #ffffff;
+        }
+        .success-container {
+            background-color: #1a1a1a;
+            border: 1px solid #333;
+        }
+        .btn-primary {
+            background-color: #2563eb;
+            color: white;
+            transition: background-color 0.3s ease;
+        }
+        .btn-primary:hover {
+            background-color: #1d4ed8;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center px-4 py-10">
+    <div class="success-container w-full max-w-md p-8 rounded-2xl shadow-lg text-center">
+        <div class="w-16 h-16 bg-green-600/20 rounded-full mx-auto flex items-center justify-center mb-6">
+            <svg class="w-8 h-8 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+        </div>
+        
+        <h1 class="text-2xl font-bold text-white mb-3"><%= message %></h1>
+        
+        <% if (typeof additionalInfo !== 'undefined' && additionalInfo) { %>
+            <p class="text-gray-400 mb-6"><%= additionalInfo %></p>
+        <% } %>
+        
+        <div class="space-y-3">
+            <a href="<%= redirectUrl %>" class="btn-primary w-full py-3 rounded-lg font-medium block">
+                <%= redirectText %>
+            </a>
+            
+            <% if (typeof showHome !== 'undefined' && showHome) { %>
+                <a href="/" class="inline-block text-gray-400 hover:text-white">Go to Home</a>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>
