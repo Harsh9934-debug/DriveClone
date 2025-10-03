@@ -36,16 +36,27 @@ router.get('/public-files', (req, res) => {
 // API route to get public files
 router.get('/public-files-api', async (req, res) => {
     try {
+        console.log('Fetching public files from database');
         const files = await FileModel.find({ isPublic: true })
             .populate('uploadedBy', 'name email')
             .sort({ uploadDate: -1 })
             .limit(50); // Limit to prevent overwhelming the page
+
+        console.log(`Found ${files.length} public files`);
+        if (files.length > 0) {
+            console.log('First file details:', {
+                name: files[0].originalName,
+                isPublic: files[0].isPublic,
+                hasUploadedBy: !!files[0].uploadedBy
+            });
+        }
 
         res.json({
             success: true,
             files: files
         });
     } catch (error) {
+        console.error('Error fetching public files:', error);
         res.status(500).json({
             success: false,
             message: 'Error fetching public files: ' + error.message
